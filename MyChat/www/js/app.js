@@ -1,6 +1,11 @@
 // Ionic Starter App
 
 var firebaseUrl = "https://frand-6ddcc.firebaseio.com";
+
+function onDeviceReady() {
+  angular.bootstrap(document, ["mychat"]);
+}
+
 document.addEventListener("deviceready", onDeviceReady, false);
 // angular.module is a global place for creating, registering and retrieving Angular modules
 // 'starter' is the name of this angular module example (also set in a <body> attribute in index.html)

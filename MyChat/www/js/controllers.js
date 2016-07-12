@@ -35,6 +35,7 @@
 
 angular.module('mychat.controllers', [])
 
+
   .controller('LoginCtrl', function ($scope, $ionicModal, $state) {
     console.log('Login Controller Initialized');
 
@@ -43,6 +44,8 @@ angular.module('mychat.controllers', [])
     }).then(function (modal) {
       $scope.modal = modal;
     });
+
+
 
     $scope.createUser = function (user) {
       console.log("Create User Function called");
@@ -99,16 +102,43 @@ angular.module('mychat.controllers', [])
     }
   })
 
+  .controller('ChatCtrl', function ($scope, Chats, $state) {
+    //console.log("Chat Controller initialized");
 
-  .controller('ChatCtrl', function ($scope, Chats) {
-    console.log("Chat Controller initialized");
-    $scope.chats = Chats.all();
+    $scope.IM = {
+      textMessage: ""
+    };
 
+    Chats.selectRoom($state.params.roomId);
+
+    var roomName = Chats.getSelectedRoomName();
+
+    // Fetching Chat Records only if a Room is Selected
+    if (roomName) {
+      $scope.roomName = " - " + roomName;
+      $scope.chats = Chats.all();
+    }
+
+    $scope.sendMessage = function (msg) {
+      console.log(msg);
+      Chats.send($scope.displayName, msg);
+      $scope.IM.textMessage = "";
+    }
+
+    $scope.remove = function (chat) {
+      Chats.remove(chat);
+    }
   })
 
-  .controller('RoomsCtrl', function ($scope, Rooms) {
-  console.log("Rooms Controller initialized");
-  $scope.rooms = Rooms.all();
 
+  .controller('RoomsCtrl', function ($scope, Rooms, Chats, $state) {
+    //console.log("Rooms Controller initialized");
+    $scope.rooms = Rooms.all();
 
+    $scope.openChatRoom = function (roomId) {
+      $state.go('tab.chat', {
+        roomId: roomId
+      });
+    }
   });
+
